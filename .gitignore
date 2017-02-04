@@ -3,6 +3,9 @@
 .project
 .settings
 
+# ignore local config file
+conf/local.config.json
+
 # Compiled Lua sources
 luac.out
 

@@ -1,0 +1,10 @@
+{
+	"net" : {
+		"station": {
+			"ssid": 	"Internet",
+			"password":	"password"
+		}
+	
+	}
+
+}

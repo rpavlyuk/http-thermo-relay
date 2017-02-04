@@ -1,6 +1,9 @@
--- Begin WiFi configuration
+-- Initial requires
+require "util.config"
 
+-- Begin WiFi configuration
 local wifiConfig = {}
+local settings = get_settings()
 
 -- wifi.STATION         -- station: join a WiFi network
 -- wifi.SOFTAP          -- access point: create a WiFi network
@@ -17,8 +20,8 @@ wifiConfig.accessPointIpConfig.netmask = "255.255.255.0"
 wifiConfig.accessPointIpConfig.gateway = "192.168.111.1"
 
 wifiConfig.stationPointConfig = {}
-wifiConfig.stationPointConfig.ssid = "Internet"        -- Name of the WiFi network you want to join
-wifiConfig.stationPointConfig.pwd =  ""                -- Password for the WiFi network
+wifiConfig.stationPointConfig.ssid = settings["net"]["station"]["ssid"]       -- Name of the WiFi network you want to join
+wifiConfig.stationPointConfig.pwd =  settings["net"]["station"]["password"]               -- Password for the WiFi network
 
 -- Tell the chip to connect to the access point
 

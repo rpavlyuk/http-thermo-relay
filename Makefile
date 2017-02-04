@@ -4,7 +4,7 @@
 # Path to nodemcu-uploader (https://github.com/kmpm/nodemcu-uploader)
 NODEMCU-UPLOADER=../nodemcu-uploader/nodemcu-uploader.py
 # Serial port
-PORT=/dev/cu.SLAB_USBtoUART
+PORT=/dev/tty.wchusbserial1420
 SPEED=115200
 
 NODEMCU-COMMAND=$(NODEMCU-UPLOADER) -b $(SPEED) --start_baud $(SPEED) -p $(PORT) upload
@@ -13,6 +13,8 @@ NODEMCU-COMMAND=$(NODEMCU-UPLOADER) -b $(SPEED) --start_baud $(SPEED) -p $(PORT)
 # End of user config
 ######################################################################
 HTTP_FILES := $(wildcard http/*)
+UTIL_FILES := $(wildcard util/*)
+CONF_FILES := $(wildcard conf/*)
 LUA_FILES := \
    init.lua \
    httpserver.lua \
@@ -28,6 +30,7 @@ LUA_FILES := \
 # Print usage
 usage:
 	@echo "make upload FILE:=<file>  to upload a specific file (i.e make upload FILE:=init.lua)"
+	@echo "make upload_conf          to upload configuration file"
 	@echo "make upload_http          to upload files to be served"
 	@echo "make upload_server        to upload the server code and init.lua"
 	@echo "make upload_all           to upload all"
@@ -40,12 +43,16 @@ upload:
 # Upload HTTP files only
 upload_http: $(HTTP_FILES)
 	@python $(NODEMCU-COMMAND) $(foreach f, $^, $(f))
+	
+# Upload configuration files only
+upload_conf: $(CONF_FILES)
+	@python $(NODEMCU-COMMAND) $(foreach f, $^, $(f))
 
 # Upload httpserver lua files (init and server module)
-upload_server: $(LUA_FILES)
+upload_server: $(LUA_FILES) $(UTIL_FILES) $(CONF_FILES)
 	@python $(NODEMCU-COMMAND) $(foreach f, $^, $(f))
 
 # Upload all
-upload_all: $(LUA_FILES) $(HTTP_FILES)
+upload_all: $(LUA_FILES) $(UTIL_FILES) $(CONF_FILES) $(HTTP_FILES)
 	@python $(NODEMCU-COMMAND) $(foreach f, $^, $(f))
 
